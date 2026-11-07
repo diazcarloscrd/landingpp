@@ -1,11 +1,34 @@
-export type ServiceType =
-  | "landing"
-  | "ecommerce"
-  | "crm"
-  | "turnos"
-  | "cotizador"
-  | "rediseno"
-  | "other";
+export const VALID_SERVICES = [
+  "crm",
+  "ecommerce",
+  "landing",
+  "turnos",
+  "cotizador",
+  "rediseno",
+  "other",
+] as const;
+
+export type ServiceType = (typeof VALID_SERVICES)[number];
+
+export const VALID_BUDGET_RANGES = [
+  "flexible",
+  "hasta-500k",
+  "500k-1m",
+  "1m-2.5m",
+  "mas-2.5m",
+  "a-convenir",
+] as const;
+
+export type BudgetRange = (typeof VALID_BUDGET_RANGES)[number];
+
+export const VALID_TIMELINES = [
+  "urgente",
+  "1-2-semanas",
+  "un-mes",
+  "flexible",
+] as const;
+
+export type TimelineType = (typeof VALID_TIMELINES)[number];
 
 export interface QuoteFormData {
   name: string;
@@ -17,9 +40,10 @@ export interface QuoteFormData {
   message: string;
   budgetRange?: string;
   timeline?: string;
-  projectDetails?: Record<string, any>;
+  projectDetails?: Record<string, string | number | boolean | string[]>;
   consent: boolean;
-  honeypot?: string; // Campo trampa anti-spam
+  honeypot?: string;
+  renderTimestamp?: number;
 }
 
 export interface LeadRecord {
@@ -31,8 +55,8 @@ export interface LeadRecord {
   phone: string | null;
   business_name: string | null;
   industry: string | null;
-  service_type: string;
-  project_details: Record<string, any>;
+  service_type: ServiceType;
+  project_details: Record<string, unknown>;
   message: string;
   budget_range: string | null;
   timeline: string | null;
@@ -42,9 +66,10 @@ export interface LeadRecord {
   consent_at: string;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
   error?: string;
+  errors?: Record<string, string>;
 }

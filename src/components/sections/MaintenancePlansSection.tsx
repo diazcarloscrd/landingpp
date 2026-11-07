@@ -1,13 +1,16 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
-import { getWhatsAppLink } from "@/config/site";
-import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { useQuote } from "@/context/QuoteContext";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import {
   ShieldCheck,
   Server,
   Rocket,
   CheckCircle2,
   Wrench,
+  ArrowRight,
 } from "lucide-react";
 
 const PLANS = [
@@ -17,7 +20,7 @@ const PLANS = [
     badge: "Sin Abono Mensual Obligatorio",
     icon: Wrench,
     highlight: false,
-    desc: "Ideal si solo necesitás el desarrollo inicial listo para usar y preferís administrarlo por tu cuenta.",
+    desc: "Ideal si solo necesitás el desarrollo inicial listo para usar y preferís administrarlo por tu cuenta sin costos fijos.",
     features: [
       "Código y plataforma 100% de tu propiedad",
       "Capacitación de uso del panel o sistema",
@@ -25,9 +28,7 @@ const PLANS = [
       "Sin ataduras ni contratos de permanencia",
       "Posibilidad de pedir mejoras puntuales cuando quieras",
     ],
-    cta: "Consultar Modalidad",
-    whatsappMsg:
-      "Hola CDByte! Quiero consultar por un desarrollo con entrega llave en mano.",
+    cta: "Consultar esta modalidad",
   },
   {
     id: "mantenimiento-impulso",
@@ -35,17 +36,15 @@ const PLANS = [
     badge: "El Más Elegido • Tranquilidad Total",
     icon: Server,
     highlight: true,
-    desc: "Nos ocupamos de que tu web, tienda o sistema esté siempre rápido, seguro, actualizado y online 24/7.",
+    desc: "Nos ocupamos de que tu web, tienda o sistema esté siempre rápido, seguro, respaldado y online 24/7.",
     features: [
       "Hosting de alta velocidad y certificado SSL seguro",
-      "Copias de seguridad (Backups) periódicas",
+      "Copias de seguridad periódicas automatizadas",
       "Monitoreo de funcionamiento y seguridad técnica",
       "Ajustes menores mensuales (textos, fotos, promociones)",
-      "Soporte técnico directo por WhatsApp ante cualquier duda",
+      "Soporte técnico directo ante cualquier duda",
     ],
-    cta: "Consultar Plan Mantenimiento",
-    whatsappMsg:
-      "Hola CDByte! Me interesa conocer los detalles del Plan de Mantenimiento y Hosting mensual.",
+    cta: "Consultar este plan",
   },
   {
     id: "evolucion-continua",
@@ -53,42 +52,53 @@ const PLANS = [
     badge: "Para Negocios en Crecimiento",
     icon: Rocket,
     highlight: false,
-    desc: "Para empresas que buscan sumar nuevas funciones, reportes o mejoras comerciales todos los meses.",
+    desc: "Para empresas que buscan sumar nuevas funciones, reportes o mejoras comerciales continuas mes a mes.",
     features: [
       "Todo lo incluido en el Plan Mantenimiento & Hosting",
       "Bolsa de horas mensuales para programar nuevas funciones",
-      "Optimización continua de velocidad y conversión SEO",
+      "Optimización continua de velocidad y conversión",
       "Prioridad de atención e implementación ágil",
       "Reunión mensual de seguimiento 1 a 1",
     ],
-    cta: "Consultar Plan Evolución",
-    whatsappMsg:
-      "Hola CDByte! Quiero consultar por el Plan Evolución para mi negocio.",
+    cta: "Consultar este plan",
   },
 ];
 
 export const MaintenancePlansSection: React.FC = () => {
+  const { preloadQuote } = useQuote();
+
+  const handleSelectPlan = (plan: (typeof PLANS)[number]) => {
+    preloadQuote(
+      {
+        message: `Hola CDByte, me interesa consultar por el plan de acompañamiento "${plan.name}" (${plan.badge}).`,
+        projectDetails: {
+          selectedPlan: plan.name,
+          planId: plan.id,
+        },
+      },
+      "presupuesto"
+    );
+  };
+
   return (
     <section
       id="mantenimiento"
       className="relative py-24 bg-[#060715] border-t border-white/5 overflow-hidden scroll-mt-20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-violet-950/70 border border-violet-500/30 text-violet-300 text-xs font-semibold uppercase tracking-wider mb-3">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Acompañamiento Flexible
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Vos Elegís Cómo Gestionar tu{" "}
-            <span className="bg-gradient-to-r from-violet-400 to-emerald-300 bg-clip-text text-transparent">
-              Proyecto una vez Lanzado
-            </span>
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300">
-            Tu plataforma es tuya desde el día uno. Podés autogestionarla sin abonos fijos o delegarnos el mantenimiento técnico mensual para despreocuparte por completo.
-          </p>
-        </div>
+        <SectionHeader
+          badge="Acompañamiento Flexible"
+          badgeIcon={<ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />}
+          title={
+            <>
+              Vos Elegís Cómo Gestionar tu{" "}
+              <span className="bg-gradient-to-r from-violet-400 to-emerald-300 bg-clip-text text-transparent">
+                Plataforma una vez Lanzada
+              </span>
+            </>
+          }
+          subtitle="Tu plataforma es tuya desde el día uno. Podés autogestionarla sin costos fijos o delegarnos el mantenimiento técnico para despreocuparte por completo."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {PLANS.map((plan) => {
@@ -119,7 +129,7 @@ export const MaintenancePlansSection: React.FC = () => {
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2 font-display">{plan.name}</h3>
                     <p className="text-sm text-slate-400 leading-relaxed mb-6">{plan.desc}</p>
 
                     <div className="space-y-3 mb-7">
@@ -132,19 +142,16 @@ export const MaintenancePlansSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <a
-                    href={getWhatsAppLink(plan.whatsappMsg)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${
-                      plan.highlight
-                        ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20"
-                        : "bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10"
-                    }`}
+                  {/* Botón que precarga el plan en el formulario (sin WhatsApp individual) */}
+                  <Button
+                    onClick={() => handleSelectPlan(plan)}
+                    variant={plan.highlight ? "primary" : "secondary"}
+                    size="md"
+                    fullWidth
+                    icon={<ArrowRight className="w-4 h-4" />}
                   >
-                    <WhatsAppIcon className="w-4 h-4" />
-                    <span>{plan.cta}</span>
-                  </a>
+                    {plan.cta}
+                  </Button>
                 </div>
               </div>
             );

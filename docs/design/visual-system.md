@@ -1,45 +1,40 @@
 # Sistema de Diseño Visual — CDByte
 
-## 1. Tokens de Color (CSS Variables & Tailwind)
+## 1. Tokens de Color & Ritmo Visual
+Para evitar la monotonía de tarjetas idénticas y dotar de cadencia a la página, los fondos se alternan intencionalmente según el contenido:
 
-### Base & Superficies
-- `--bg-base`: `#05060f` (Negro obsidiana / espacio profundo)
-- `--bg-surface-card`: `rgba(18, 19, 40, 0.7)` (Vidrio tintado)
-- `--bg-surface-subtle`: `rgba(25, 27, 56, 0.5)`
-- `--bg-surface-hover`: `rgba(35, 38, 78, 0.65)`
+- **Hero:** `#060714` con resplandor superior cúpula (`hero-dome-glow`).
+- **Servicios:** `#060714` con tres pilares destacados en tarjetas de alta jerarquía y extensiones secundarias compactas.
+- **Demos:** `#070817` con panel de simulación tipo app con pestaña activa y controles interactivos.
+- **Estimador:** `#08091a` con acentos en violeta y esmeralda y glow focalizado.
+- **Rubros:** `#060714` con selector de pestañas pill y tarjetas comparativas de problema/solución.
+- **Proceso:** `#07091e` con sutil trama micro-reticular para diferenciar la metodología del resto.
+- **Mantenimiento:** `#060715` con acentos en esmeralda para evocar estabilidad y tranquilidad.
+- **FAQ:** `#070817` con acordeones sobrios sin sobrecarga visual.
+- **Formulario:** `#060714` con resplandor focalizado para dirigir la atención a la conversión final.
 
-### Paleta Principal & Acentos
-- `--color-primary`: `#8b5cf6` (Violet 500)
-- `--color-primary-hover`: `#7c3aed` (Violet 600)
-- `--color-secondary`: `#6366f1` (Indigo 500)
-- `--color-accent-cyan`: `#06b6d4` (Cyan 500)
-- `--color-accent-glow`: `rgba(139, 92, 246, 0.35)`
+## 2. Tipografía Oficial (`next/font/google`)
+- **Fuente de Lectura (Sans):** `Inter` (`latin`, variable `--font-sans`). Máxima legibilidad en pantallas de cualquier densidad y resolución.
+- **Fuente de Títulos (Display):** `Plus_Jakarta_Sans` (`latin`, variable `--font-display`). Tipografía geométrica, contemporánea y con presencia técnica para encabezados de alto impacto.
 
-### Tipografía
-- `--text-heading`: `#ffffff` (Blanco luminoso)
-- `--text-body`: `#94a3b8` (Slate 400 - Alta legibilidad sobre oscuro)
-- `--text-muted`: `#64748b` (Slate 500)
-- `--text-highlight`: `#c4b5fd` (Violet 300)
+## 3. Componentes Primitivos Reutilizables
+- **`src/components/ui/Button.tsx`:**
+  - `primary`: Gradiente violeta-índigo con sombra luminosa (`shadow-[0_0_24px_rgba(139,92,246,0.45)]`), píldora o redondeado según tamaño.
+  - `secondary`: Superficie de vidrio oscura (`bg-white/5`), borde sutil y texto claro.
+  - `ghost`: Sin borde ni fondo por defecto; revela sutileza al hover.
+  - `whatsapp`: Estilo esmeralda oficial con brillo controlado (`bg-emerald-500/15`, borde y texto esmeralda).
+  - Accesibilidad: Foco visible explícito (`focus-visible:ring-2`), soporte de estados `disabled` y microinteracción `active:scale-95`.
+- **`src/components/ui/SectionHeader.tsx`:**
+  - Badge píldora con ícono y texto en mayúsculas pequeñas.
+  - Título con `font-display`, peso extrabold y gradiente de acento.
+  - Subtítulo fluido con `text-slate-300` y ancho máximo de lectura controlada.
 
-### Bordes & Separadores
-- `--border-subtle`: `rgba(255, 255, 255, 0.08)`
-- `--border-glow`: `rgba(139, 92, 246, 0.3)`
-- `--border-highlight`: `rgba(168, 85, 247, 0.5)`
+## 4. Identidad de Marca y Medios
+- **Favicon dinámico:** `src/app/icon.tsx` (PNG 32x32 generado por servidor con monograma de código sobre gradiente).
+- **Open Graph dinámico:** `src/app/opengraph-image.tsx` (PNG 1200x630 optimizado para previsualizaciones en WhatsApp, LinkedIn, Twitter y Google con fondo obsidiana, tipografía oficial y beneficios clave).
+- **Icono oficial de WhatsApp:** Componente vectorial `WhatsAppIcon` sin dependencias de fuentes externas.
 
-## 2. Efectos & Glassmorphism
-- **Backdrop Blur:** `backdrop-blur-md` (12px) y `backdrop-blur-xl` (24px).
-- **Sombras de Acento:** `0 0 35px -5px rgba(139, 92, 246, 0.35)`.
-- **Hero Dome:** Gradiente elíptico radial `radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.38), transparent 70%)`.
-- **Bordes Bioluminiscentes:** Borde de 1px con gradiente angular o gradiente lineal traslúcido.
-
-## 3. Tipografía
-- **Familia Primaria:** Inter, Plus Jakarta Sans o Geist Sans (moderna, geométrica, neutra).
-- **Display Headings:** Tracking tight (`-0.03em`), line-height ajustado (`leading-tight` a `leading-none`).
-- **Body:** `leading-relaxed` (1.625), tamaño base `16px` (desktop), `15px` (móvil).
-
-## 4. Componentes Clave
-- **Botón CTA Primario:** Fondo gradiente violeta-índigo, píldora redonda (`rounded-full`), glow púrpura sutil, flecha animada al hover.
-- **Botón CTA Secundario:** Fondo semi-transparente, borde sutil, texto blanco, efecto de brillo al interactuar.
-- **Tarjetas de Servicio:** Borde con glow violeta, badges luminosos, micro-ilustraciones vectoriales interactivas.
-- **Formulario de Presupuesto:** Inputs oscuros translúcidos con foco en violeta brillante, selector dinámico de servicios y validaciones inmediatas.
-
+## 5. Accesibilidad y Rendimiento
+- **Foco visible:** Anillos de foco violeta y esmeralda de 2px en todos los botones, enlaces y campos de formulario.
+- **Contraste:** Texto blanco y `text-slate-300` sobre fondos `#060714` / `#0c0d24`, superando ratio 4.5:1 (WCAG AA).
+- **Movimiento Reducido:** `@media (prefers-reduced-motion: reduce)` desactiva animaciones y transiciones extensas para usuarios con sensibilidad vestibular.

@@ -15,7 +15,7 @@ html {
 body {
   color: var(--foreground);
   background-color: var(--background);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
   selection-background-color: #8b5cf6;
   selection-color: #ffffff;
@@ -82,7 +82,7 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
 }
 
-/* Cúpula de resplandor superior (Hero Dome Glow de la referencia) */
+/* Cúpula de resplandor superior (Hero Dome Glow) */
 .hero-dome-glow {
   position: absolute;
   top: -150px;

@@ -1,16 +1,65 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { validateQuoteForm } from "@/lib/validation";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { getSupabaseServerClient } from "@/lib/supabase";
 import { sendTelegramNotification } from "@/lib/notifications";
-import fs from "fs";
-import path from "path";
+
+const MAX_BODY_BYTES = 16384; // 16 KB límite de carga útil
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. Obtención de IP y control de abuso / rate limit
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-    const { allowed } = checkRateLimit(ip);
+    // 1. Verificación de Content-Type
+    const contentType = req.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Formato no admitido. Se requiere application/json.",
+        },
+        { status: 415 }
+      );
+    }
+
+    // 2. Control de longitud máxima por cabecera
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "La carga útil enviada excede el tamaño máximo permitido (16 KB).",
+        },
+        { status: 413 }
+      );
+    }
+
+    // 3. Lectura controlada del texto y parseo seguro de JSON
+    const rawText = await req.text();
+    if (rawText.length > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "La solicitud excede el tamaño máximo permitido.",
+        },
+        { status: 413 }
+      );
+    }
+
+    let rawBody: unknown;
+    try {
+      rawBody = JSON.parse(rawText);
+    } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Cuerpo de solicitud inválido: formato JSON malformado.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 4. Rate Limiting con IP autoritativa
+    const ip = getClientIp(req.headers);
+    const { allowed } = await checkRateLimit(ip);
     if (!allowed) {
       return NextResponse.json(
         {
@@ -21,10 +70,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Parseo y validación estricta de carga útil
-    const body = await req.json();
-    const validation = validateQuoteForm(body);
-
+    // 5. Validación estricta con listas blancas y tipado
+    const validation = validateQuoteForm(rawBody);
     if (!validation.isValid || !validation.sanitizedData) {
       return NextResponse.json(
         {
@@ -38,73 +85,71 @@ export async function POST(req: NextRequest) {
 
     const data = validation.sanitizedData;
 
-    // 3. Persistencia en Base de Datos (Supabase con fallback seguro local)
+    // 6. Persistencia obligatoria en Supabase (Regla 02, Regla 03 y Auditoría B1)
     const supabase = getSupabaseServerClient();
-    let leadId = `lead-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-    let persistedInSupabase = false;
+    if (!supabase) {
+      console.warn("Aviso operativo: Supabase no está configurado en las variables de servidor.");
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "No pudimos registrar tu solicitud en este momento por mantenimiento del sistema. Por favor escribinos directamente por WhatsApp para coordinar tu presupuesto.",
+        },
+        { status: 503 }
+      );
+    }
 
-    if (supabase) {
-      const { data: inserted, error: dbError } = await supabase
-        .from("leads")
-        .insert({
+    const { data: inserted, error: dbError } = await supabase
+      .from("leads")
+      .insert({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        business_name: data.businessName || null,
+        service_type: data.serviceType,
+        project_details: data.projectDetails || {},
+        message: data.message,
+        budget_range: data.budgetRange || null,
+        timeline: data.timeline || null,
+        status: "new",
+        source: "landing_web",
+        consent: true,
+        consent_at: new Date().toISOString(),
+      })
+      .select("id")
+      .single();
+
+    if (dbError || !inserted) {
+      console.error("Error al persistir lead en Supabase (código):", dbError?.code);
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Ocurrió una falla al guardar tu solicitud en la base de datos. Por favor comunicate directamente por WhatsApp.",
+        },
+        { status: 503 }
+      );
+    }
+
+    const leadId = inserted.id;
+
+    // 7. Notificación asíncrona segura con after() de Next.js (no bloquea la respuesta ni se interrumpe)
+    after(async () => {
+      try {
+        await sendTelegramNotification({
+          leadId,
           name: data.name,
           email: data.email,
-          phone: data.phone || null,
-          business_name: data.businessName || null,
-          industry: data.industry || null,
-          service_type: data.serviceType,
-          project_details: data.projectDetails || {},
+          phone: data.phone,
+          serviceType: data.serviceType,
+          businessName: data.businessName,
           message: data.message,
-          budget_range: data.budgetRange || null,
-          timeline: data.timeline || null,
-          status: "new",
-          source: "landing_web",
-          consent: true,
-        })
-        .select("id")
-        .single();
-
-      if (dbError) {
-        console.error("Error persistiendo en Supabase:", dbError);
-      } else if (inserted) {
-        leadId = inserted.id;
-        persistedInSupabase = true;
+          budgetRange: data.budgetRange,
+        });
+      } catch (notifyErr) {
+        console.error("Fallo menor en despacho asíncrono de notificación:", notifyErr);
       }
-    }
-
-    // Fallback de almacenamiento seguro estructurado en servidor (para no perder el lead si Supabase no está conectado)
-    if (!persistedInSupabase) {
-      try {
-        const storageDir = path.join(process.cwd(), "docs", "operations", "leads-backup");
-        if (!fs.existsSync(storageDir)) {
-          fs.mkdirSync(storageDir, { recursive: true });
-        }
-        const record = {
-          id: leadId,
-          created_at: new Date().toISOString(),
-          ...data,
-          status: "new",
-        };
-        fs.writeFileSync(
-          path.join(storageDir, `${leadId}.json`),
-          JSON.stringify(record, null, 2),
-          "utf-8"
-        );
-      } catch (backupErr) {
-        console.error("Error guardando respaldo local del lead:", backupErr);
-      }
-    }
-
-    // 4. Disparo opcional de notificación asíncrona (Telegram)
-    sendTelegramNotification({
-      name: data.name!,
-      email: data.email!,
-      phone: data.phone,
-      serviceType: data.serviceType!,
-      businessName: data.businessName,
-      message: data.message!,
-      budgetRange: data.budgetRange,
-    }).catch((err) => console.error("Error en notificación:", err));
+    });
 
     return NextResponse.json(
       {
@@ -117,15 +162,14 @@ export async function POST(req: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Error crítico procesando solicitud de cotización:", error);
+  } catch {
+    console.error("Error no controlado en endpoint de cotización");
     return NextResponse.json(
       {
         success: false,
-        error: "Ocurrió un error inesperado al procesar tu solicitud. Por favor intenta nuevamente.",
+        error: "Ocurrió un error inesperado en el servidor. Por favor intenta nuevamente.",
       },
       { status: 500 }
     );
   }
 }
-

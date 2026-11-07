@@ -2,13 +2,20 @@ import { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = siteConfig.url.replace(/\/$/, "");
+
   return [
     {
-      url: siteConfig.url,
+      url: baseUrl,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 1,
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/privacidad`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
     },
   ];
 }
-

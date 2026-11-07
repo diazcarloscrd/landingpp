@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Briefcase,
   UtensilsCrossed,
@@ -9,21 +10,21 @@ import {
   Sparkles,
   Scissors,
   Dumbbell,
-  Laptop,
   Check,
   ArrowRight,
 } from "lucide-react";
-import { getWhatsAppLink } from "@/config/site";
-import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ServiceType } from "@/types/quote";
 
 interface Industry {
   id: string;
   name: string;
-  icon: any;
+  icon: React.ElementType;
   problem: string;
   solution: string;
   deliverables: string[];
   recommendedService: string;
+  serviceId: ServiceType;
 }
 
 const industries: Industry[] = [
@@ -32,7 +33,7 @@ const industries: Industry[] = [
     name: "Profesionales & Consultores",
     icon: Briefcase,
     problem:
-      "Dependencia de recomendaciones boca a boca, falta de presencia profesional seria y pérdida de tiempo respondiendo preguntas básicas.",
+      "Dependencia exclusiva de recomendaciones boca a boca, falta de presencia profesional seria y tiempo perdido respondiendo consultas básicas.",
     solution:
       "Landing page de alta gama con autoridad de marca, presentación de especialidades, agenda de turnos y formulario de captación directa.",
     deliverables: [
@@ -42,22 +43,24 @@ const industries: Industry[] = [
       "Ficha de casos y servicios",
     ],
     recommendedService: "Landing Page Profesional",
+    serviceId: "landing",
   },
   {
     id: "gastronomia",
     name: "Gastronomía & Locales",
     icon: UtensilsCrossed,
     problem:
-      "Comisiones abusivas de aplicaciones de delivery (15% - 30%) y caos al tomar pedidos manualmente por WhatsApp.",
+      "Comisiones abusivas de aplicaciones de delivery (15% - 30%) y caos al tomar pedidos manualmente por WhatsApp en horas pico.",
     solution:
-      "Tienda online de pedidos directos: menú interactivo, opciones de envío/retiro, cálculo de envío y recepción ordenada de pedidos.",
+      "Tienda online de pedidos directos: menú interactivo, opciones de envío o retiro en local, cálculo de envío y recepción ordenada de órdenes.",
     deliverables: [
       "Catálogo dinámico con fotos y agregados",
       "Pasarela de pago y cobro al instante",
-      "Formato listo para cocina / WhatsApp",
+      "Formato listo para cocina y WhatsApp",
       "Panel de control de pedidos en vivo",
     ],
     recommendedService: "E-Commerce Gastronómico",
+    serviceId: "ecommerce",
   },
   {
     id: "comercios",
@@ -74,6 +77,7 @@ const industries: Industry[] = [
       "Panel para subir productos fácilmente",
     ],
     recommendedService: "Tienda Online / E-Commerce",
+    serviceId: "ecommerce",
   },
   {
     id: "construccion",
@@ -87,41 +91,44 @@ const industries: Industry[] = [
       "Software web interno multiusuario",
       "Módulo de presupuestos y costos",
       "Panel de avances de obra y tareas",
-      "Exportación de reportes PDF gerenciales",
+      "Métricas operativas en tiempo real",
     ],
     recommendedService: "Sistema CRM / ERP a Medida",
+    serviceId: "crm",
   },
   {
     id: "estetica",
     name: "Estética, Barberías & Spa",
     icon: Scissors,
     problem:
-      "Turnos superpuestos, inasistencias y recepcionistas desbordados atendiendo mensajes.",
+      "Turnos superpuestos, inasistencias sin aviso y recepcionistas desbordados atendiendo mensajes.",
     solution:
-      "Plataforma de reservas con confirmación automática, recordatorios preventivos y venta de productos o vouchers online.",
+      "Plataforma de reservas con confirmación automática, recordatorios preventivos y opción de cobro de seña online.",
     deliverables: [
-      "Calendario online para clientes",
+      "Calendario online para clientes 24/7",
       "Recordatorios automáticos vía WhatsApp/Email",
-      "Venta de giftcards y tratamientos",
+      "Cobro de señas con Mercado Pago",
       "Base de clientes con historial de visitas",
     ],
     recommendedService: "Web con Sistema de Turnos",
+    serviceId: "turnos",
   },
   {
     id: "fitness",
     name: "Gimnasios & Bienestar",
     icon: Dumbbell,
     problem:
-      "Dificultad para cobrar membresías mensuales y registrar el acceso de los alumnos.",
+      "Dificultad para registrar cobros recurrentes mensuales y controlar el acceso de los alumnos.",
     solution:
-      "Software de membresías con cobro recurrente automático, panel de rutinas y landing de inscripción para nuevas altas.",
+      "Software de membresías con cobro recurrente automático, panel de asistencias y landing de inscripción para nuevas altas.",
     deliverables: [
       "Suscripciones mensuales automatizadas",
       "Control de cuotas y altas",
       "Landing page de captación de socios",
       "Módulo de planes y horarios de clases",
     ],
-    recommendedService: "Software de Membresías & Web",
+    recommendedService: "Software de Gestión a Medida",
+    serviceId: "crm",
   },
 ];
 
@@ -129,23 +136,21 @@ export const IndustrySolutionsSection: React.FC = () => {
   const [selectedIndustry, setSelectedIndustry] = useState<Industry>(industries[0]);
 
   return (
-    <section id="rubros" className="relative py-24 bg-[#060714] border-t border-white/5">
+    <section id="rubros" className="relative py-24 bg-[#060714] border-t border-white/5 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-violet-950/70 border border-violet-500/30 text-violet-300 text-xs font-semibold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-            Soluciones por Rubro
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Tecnología Diseñada para{" "}
-            <span className="bg-gradient-to-r from-violet-400 to-indigo-300 bg-clip-text text-transparent">
-              Tu Tipo de Negocio
-            </span>
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-300">
-            No desarrollamos abstracciones genéricas. Resolvemos las fricciones diarias que frenan el crecimiento de tu actividad.
-          </p>
-        </div>
+        <SectionHeader
+          badge="Soluciones por Rubro"
+          badgeIcon={<Sparkles className="w-3.5 h-3.5 text-violet-400" />}
+          title={
+            <>
+              Tecnología Adaptada a{" "}
+              <span className="bg-gradient-to-r from-violet-400 to-indigo-300 bg-clip-text text-transparent">
+                Tu Tipo de Negocio
+              </span>
+            </>
+          }
+          subtitle="No desarrollamos modelos genéricos. Resolvemos las fricciones diarias que frenan las ventas o el orden en tu actividad."
+        />
 
         {/* Selector de Rubros */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-10">
@@ -160,7 +165,7 @@ export const IndustrySolutionsSection: React.FC = () => {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
                   isSelected
                     ? "bg-violet-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.5)] border border-violet-400"
-                    : "bg-surface-card text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
+                    : "bg-[#0d0e24] text-slate-300 hover:text-white hover:bg-white/10 border border-white/5"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -179,7 +184,7 @@ export const IndustrySolutionsSection: React.FC = () => {
                   Solución Recomendada: {selectedIndustry.recommendedService}
                 </div>
 
-                <h3 className="text-2xl font-bold text-white tracking-tight">
+                <h3 className="text-2xl font-bold text-white tracking-tight font-display">
                   Cómo transformamos tu operación en {selectedIndustry.name}
                 </h3>
 
@@ -213,25 +218,15 @@ export const IndustrySolutionsSection: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-2">
-                  <a
-                    href="#presupuesto"
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-colors"
+                {/* Conexión interna hacia el servicio (en lugar de CTA que corta la lectura) */}
+                <div className="pt-4 border-t border-white/10">
+                  <Link
+                    href={`#servicio-${selectedIndustry.serviceId}`}
+                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-violet-300 hover:text-white transition-colors group/link"
                   >
-                    <span>Cotizar en Formulario</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
-                  <a
-                    href={getWhatsAppLink(
-                      `Hola CDByte! Tengo un negocio del rubro "${selectedIndustry.name}" y quiero consultar por una solución (${selectedIndustry.recommendedService}).`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-colors"
-                  >
-                    <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>WhatsApp Directo</span>
-                  </a>
+                    <span>Solución recomendada: {selectedIndustry.recommendedService} → ver servicio</span>
+                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -241,4 +236,3 @@ export const IndustrySolutionsSection: React.FC = () => {
     </section>
   );
 };
-

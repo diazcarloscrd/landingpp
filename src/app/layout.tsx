@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const fontDisplay = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: `${siteConfig.name} | Soluciones Digitales, CRM, E-Commerce y Landing Pages`,
@@ -16,12 +29,13 @@ export const metadata: Metadata = {
     "desarrollo digital",
   ],
   authors: [{ name: siteConfig.name }],
+  metadataBase: new URL(siteConfig.url),
   openGraph: {
     title: `${siteConfig.name} — Estudio de Desarrollo Digital`,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
-    locale: "es_ES",
+    locale: "es_AR",
     type: "website",
   },
   twitter: {
@@ -41,8 +55,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <body className="bg-[#060714] text-slate-100 min-h-screen antialiased flex flex-col selection:bg-violet-600 selection:text-white">
+    <html lang="es-AR" className={`scroll-smooth ${fontSans.variable} ${fontDisplay.variable}`}>
+      <body className="bg-[#060714] text-slate-100 font-sans min-h-screen antialiased flex flex-col selection:bg-violet-600 selection:text-white">
         {children}
       </body>
     </html>
