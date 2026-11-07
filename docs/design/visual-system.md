@@ -1,4 +1,4 @@
-# Sistema de Diseño Visual — NovaStudio Digital
+# Sistema de Diseño Visual — CDByte
 
 ## 1. Tokens de Color (CSS Variables & Tailwind)
 

@@ -1,4 +1,11 @@
-export type ServiceType = "landing" | "ecommerce" | "crm" | "other";
+export type ServiceType =
+  | "landing"
+  | "ecommerce"
+  | "crm"
+  | "turnos"
+  | "cotizador"
+  | "rediseno"
+  | "other";
 
 export interface QuoteFormData {
   name: string;
@@ -41,4 +48,3 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
 }
-

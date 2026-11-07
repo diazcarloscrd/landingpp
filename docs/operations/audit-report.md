@@ -1,4 +1,4 @@
-# Informe de Auditoría Técnica y Visual — NovaStudio Digital
+# Informe de Auditoría Técnica y Visual — CDByte
 
 ## 1. Cumplimiento de Reglas Obligatorias
 

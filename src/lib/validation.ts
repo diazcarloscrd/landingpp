@@ -33,7 +33,15 @@ export function validateQuoteForm(data: any): ValidationResult {
   }
 
   // 4. Servicio de interés
-  const validServices = ["landing", "ecommerce", "crm", "other"];
+  const validServices = [
+    "landing",
+    "ecommerce",
+    "crm",
+    "turnos",
+    "cotizador",
+    "rediseno",
+    "other",
+  ];
   if (!data.serviceType || !validServices.includes(data.serviceType)) {
     errors.serviceType = "Seleccioná el tipo de servicio que necesitás.";
   }
