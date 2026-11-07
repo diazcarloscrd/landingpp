@@ -1,13 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import {
   ShieldCheck,
   Server,
   Rocket,
   CheckCircle2,
-  MessageCircle,
-  Sparkles,
   Wrench,
 } from "lucide-react";
 
@@ -143,7 +142,7 @@ export const MaintenancePlansSection: React.FC = () => {
                         : "bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10"
                     }`}
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4" />
                     <span>{plan.cta}</span>
                   </a>
                 </div>

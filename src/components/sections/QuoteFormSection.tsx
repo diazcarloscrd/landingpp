@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { siteConfig, getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { ServiceType, QuoteFormData } from "@/types/quote";
 import {
   Send,
@@ -16,7 +17,6 @@ import {
   Calculator,
   Lightbulb,
   ArrowRight,
-  MessageCircle,
   Plus,
   Check,
 } from "lucide-react";
@@ -331,14 +331,14 @@ export const QuoteFormSection: React.FC = () => {
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-slate-300">
-            Completá el formulario o tocá una de las ideas sugeridas. También podés escribirnos directo al WhatsApp{" "}
+            Completá el formulario o tocá una de las ideas sugeridas. También podés consultarnos directo por{" "}
             <a
               href={siteConfig.contact.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-emerald-400 font-semibold hover:underline"
             >
-              {siteConfig.contact.phoneDisplay}
+              WhatsApp
             </a>
             .
           </p>
@@ -369,8 +369,8 @@ export const QuoteFormSection: React.FC = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Agilizar ahora por WhatsApp ({siteConfig.contact.phoneDisplay})</span>
+                    <WhatsAppIcon className="w-4 h-4" />
+                    <span>Agilizar ahora por WhatsApp</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                   <button
@@ -736,14 +736,25 @@ export const QuoteFormSection: React.FC = () => {
 
                 {/* Casilla de Consentimiento Informado (Regla 03.5) */}
                 <div className="pt-1">
-                  <label className="flex items-start gap-3 cursor-pointer select-none">
+                  <label className="flex items-start gap-3 cursor-pointer select-none group">
                     <input
                       type="checkbox"
                       name="consent"
                       checked={formData.consent}
                       onChange={handleInputChange}
-                      className="mt-1 w-4 h-4 rounded border-white/20 bg-black/40 text-violet-600 focus:ring-violet-500 cursor-pointer"
+                      className="sr-only"
                     />
+                    <span
+                      className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${
+                        formData.consent
+                          ? "bg-violet-600 border-violet-400 text-white shadow-[0_0_12px_rgba(139,92,246,0.5)]"
+                          : fieldErrors.consent
+                          ? "bg-black/50 border-rose-500"
+                          : "bg-black/50 border-white/20 group-hover:border-violet-400/60"
+                      }`}
+                    >
+                      {formData.consent && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    </span>
                     <span className="text-xs text-slate-300 leading-relaxed">
                       Acepto ser contactado por <strong className="text-white">CDByte</strong> para recibir asesoramiento y presupuesto sobre mi consulta. Mis datos serán tratados de forma estrictamente confidencial. *
                     </span>
@@ -788,7 +799,7 @@ export const QuoteFormSection: React.FC = () => {
                       rel="noopener noreferrer"
                       className="sm:col-span-5 py-4 px-5 rounded-full font-semibold text-xs sm:text-sm text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 flex items-center justify-center gap-2 transition-all"
                     >
-                      <MessageCircle className="w-4 h-4 text-emerald-400" />
+                      <WhatsAppIcon className="w-4 h-4 text-emerald-400" />
                       <span>O Consultar por WhatsApp</span>
                     </a>
                   </div>

@@ -12,9 +12,9 @@ import {
   Laptop,
   Check,
   ArrowRight,
-  MessageCircle,
 } from "lucide-react";
 import { getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 interface Industry {
   id: string;
@@ -229,7 +229,7 @@ export const IndustrySolutionsSection: React.FC = () => {
                     rel="noopener noreferrer"
                     className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-colors"
                   >
-                    <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-400" />
                     <span>WhatsApp Directo</span>
                   </a>
                 </div>

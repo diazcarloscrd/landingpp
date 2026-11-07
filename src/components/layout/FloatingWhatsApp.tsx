@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { siteConfig, getWhatsAppLink } from "@/config/site";
-import { MessageCircle, X, Send, Sparkles } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { X, Send } from "lucide-react";
 
 export const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,7 @@ export const FloatingWhatsApp: React.FC = () => {
           {/* Cuerpo con opciones rápidas */}
           <div className="p-4 space-y-3">
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
-              ¡Hola! 👋 Soy Carlos de <strong className="text-white">CDByte</strong>. Elegí una opción para hablar directo por WhatsApp ({siteConfig.contact.phoneDisplay}):
+              ¡Hola! 👋 Soy Carlos de <strong className="text-white">CDByte</strong>. Elegí una opción para hablar directo por WhatsApp:
             </div>
 
             <div className="space-y-1.5">
@@ -84,7 +85,7 @@ export const FloatingWhatsApp: React.FC = () => {
               rel="noopener noreferrer"
               className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 transition-all"
             >
-              <MessageCircle className="w-4 h-4" />
+              <WhatsAppIcon className="w-4 h-4" />
               <span>Abrir Chat en WhatsApp</span>
             </a>
           </div>
@@ -112,7 +113,7 @@ export const FloatingWhatsApp: React.FC = () => {
         >
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-300 ring-2 ring-[#060714] animate-ping" />
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-[#060714]" />
-          {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-7 h-7" />}
+          {isOpen ? <X className="w-6 h-6" /> : <WhatsAppIcon className="w-7 h-7" />}
         </button>
       </div>
     </div>

@@ -2,14 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { getWhatsAppLink, siteConfig } from "@/config/site";
+import { getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import {
   Calculator,
   CheckCircle2,
-  MessageCircle,
   ArrowRight,
   Clock,
-  Sparkles,
   Layers,
   Check,
 } from "lucide-react";
@@ -277,7 +276,7 @@ export const BudgetCalculatorSection: React.FC = () => {
                   rel="noopener noreferrer"
                   className="w-full py-3.5 px-5 rounded-full font-bold text-sm text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-[0_0_25px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 transition-all active:scale-95"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <WhatsAppIcon className="w-4 h-4" />
                   <span>Recibir Presupuesto por WhatsApp</span>
                 </a>
 

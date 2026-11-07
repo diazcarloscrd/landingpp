@@ -2,13 +2,12 @@ import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { ProjectCarousel } from "@/components/interactive/ProjectCarousel";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import {
   ArrowRight,
   Sparkles,
   ShieldCheck,
   Zap,
-  Code2,
-  MessageCircle,
   UserCheck,
 } from "lucide-react";
 
@@ -60,10 +59,10 @@ export const HeroSection: React.FC = () => {
             href={siteConfig.contact.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm sm:text-base font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 hover:border-emerald-400 backdrop-blur-md transition-all duration-200 active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-sm sm:text-base font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 hover:border-emerald-400 backdrop-blur-md transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
-            <MessageCircle className="w-5 h-5 text-emerald-400" />
-            <span>Hablar por WhatsApp ({siteConfig.contact.phoneDisplay})</span>
+            <WhatsAppIcon className="w-5 h-5 text-emerald-400 shrink-0" />
+            <span>Hablar por WhatsApp</span>
           </a>
 
           <Link

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Menu, X, ArrowRight, Code2, MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { Menu, X, ArrowRight, Code2 } from "lucide-react";
 
 export const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -74,7 +75,7 @@ export const Header: React.FC = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs lg:text-sm font-semibold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 hover:border-emerald-400/50 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
-            <MessageCircle className="w-4 h-4 text-emerald-400" />
+            <WhatsAppIcon className="w-4 h-4 text-emerald-400" />
             <span>WhatsApp</span>
           </a>
 
@@ -96,7 +97,7 @@ export const Header: React.FC = () => {
             aria-label="WhatsApp Directo"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30"
           >
-            <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+            <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-400" />
             <span>WhatsApp</span>
           </a>
 
@@ -144,8 +145,8 @@ export const Header: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30"
             >
-              <MessageCircle className="w-4 h-4 text-emerald-400" />
-              <span>WhatsApp Directo ({siteConfig.contact.phoneDisplay})</span>
+              <WhatsAppIcon className="w-4 h-4 text-emerald-400" />
+              <span>Hablar por WhatsApp</span>
             </a>
           </div>
         </div>

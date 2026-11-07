@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import {
   Globe,
   ShoppingCart,
@@ -11,7 +12,6 @@ import {
   ArrowRight,
   CheckCircle2,
   Sparkles,
-  MessageCircle,
   UserCheck,
   Clock,
   Cpu,
@@ -259,7 +259,7 @@ export const ServicesSection: React.FC = () => {
                       title="Consultar directo por WhatsApp"
                       className="p-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 hover:text-emerald-300 transition-all shrink-0"
                     >
-                      <MessageCircle className="w-5 h-5" />
+                      <WhatsAppIcon className="w-5 h-5" />
                     </a>
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export const ServicesSection: React.FC = () => {
 
                 <div className="flex items-center gap-3.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
                   <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                    <MessageCircle className="w-5 h-5" />
+                    <WhatsAppIcon className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-sm font-bold text-white">Comunicación Directa por WhatsApp</p>

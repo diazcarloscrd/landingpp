@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Code2, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { Code2, Mail, Phone, MapPin } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -24,15 +25,15 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
               Desarrollo ágil de software, tiendas online y sitios web comerciales a medida. Trato directo 1 a 1 para crear herramientas que potencian tus ventas y ordenan tu operación.
             </p>
-            <div className="pt-1 flex flex-wrap items-center gap-2">
+            <div className="pt-1 flex flex-wrap items-center gap-2.5">
               <a
                 href={siteConfig.contact.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all"
               >
-                <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                <span>WhatsApp: {siteConfig.contact.phoneDisplay}</span>
+                <WhatsAppIcon className="w-4 h-4 text-emerald-400" />
+                <span>WhatsApp</span>
               </a>
               <a
                 href={`mailto:${siteConfig.contact.email}`}

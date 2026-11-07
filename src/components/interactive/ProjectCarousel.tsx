@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/config/site";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import {
   TrendingUp,
   Users,
@@ -15,15 +16,12 @@ import {
   Globe,
   ChevronLeft,
   ChevronRight,
-  MessageCircle,
   ArrowRight,
   Clock,
   CreditCard,
   Sparkles,
   Plus,
   Check,
-  ShieldCheck,
-  Gauge,
 } from "lucide-react";
 
 interface ProjectSlide {
@@ -40,7 +38,7 @@ interface ProjectSlide {
 const SLIDES: ProjectSlide[] = [
   {
     id: "crm",
-    tag: "Software de Gestión",
+    tag: "CRM & Gestión",
     title: "CRM & Panel Operativo a Medida",
     subtitle: "Centralizá clientes, presupuestos, stock y seguimiento de órdenes en un solo lugar.",
     icon: Layers,
@@ -51,7 +49,7 @@ const SLIDES: ProjectSlide[] = [
   },
   {
     id: "ecommerce",
-    tag: "Tienda Online 24/7",
+    tag: "E-Commerce",
     title: "E-Commerce & Catálogo con Carrito",
     subtitle: "Vendé sin pagar comisiones por venta. Cobros con Mercado Pago y pedidos a WhatsApp.",
     icon: ShoppingBag,
@@ -62,7 +60,7 @@ const SLIDES: ProjectSlide[] = [
   },
   {
     id: "landing",
-    tag: "Captación Comercial",
+    tag: "Landing Page",
     title: "Landing Page de Alta Conversión",
     subtitle: "Diseñada para transformar visitas en consultas reales de clientes listos para contratar.",
     icon: Globe,
@@ -73,7 +71,7 @@ const SLIDES: ProjectSlide[] = [
   },
   {
     id: "turnos",
-    tag: "Agenda Automatizada",
+    tag: "Turnos Web",
     title: "Sistema de Turnos & Reservas Web",
     subtitle: "Tus clientes eligen día y horario disponible las 24 hs sin llamadas ni mensajes eternos.",
     icon: Calendar,
@@ -84,7 +82,7 @@ const SLIDES: ProjectSlide[] = [
   },
   {
     id: "cotizador",
-    tag: "Presupuestos al Instante",
+    tag: "Cotizador Web",
     title: "Cotizador & Calculadora Interactiva",
     subtitle: "El cliente selecciona lo que necesita, conoce un estimado al instante y te contacta calificado.",
     icon: Calculator,
@@ -95,7 +93,7 @@ const SLIDES: ProjectSlide[] = [
   },
   {
     id: "rediseno",
-    tag: "Modernización Web",
+    tag: "Rediseño Express",
     title: "Rediseño Express & Velocidad 99/100",
     subtitle: "Convertimos tu sitio web antiguo o lento en una plataforma moderna, móvil y ultra veloz.",
     icon: Zap,
@@ -151,39 +149,43 @@ export const ProjectCarousel: React.FC = () => {
       onMouseLeave={() => setIsPaused(false)}
       className="relative w-full max-w-5xl mx-auto mt-12 scroll-mt-28"
     >
-      {/* Cabecera del Carrusel de Demos */}
+      {/* Barra superior de navegación del Carrusel (Sin barras de scroll nativas) */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4 px-1">
         <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-violet-300">
           <Sparkles className="w-4 h-4 text-violet-400 shrink-0" />
-          <span>Explorá ejemplos interactivos de lo que podemos desarrollar en CDByte:</span>
+          <span>Explorá ejemplos interactivos de proyectos CDByte:</span>
         </div>
 
-        {/* Controles de flechas + contador */}
+        {/* Controles de flechas + indicador numérico */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 font-mono mr-1">
-            0{activeIndex + 1} / 0{SLIDES.length}
-          </span>
           <button
             type="button"
             onClick={prevSlide}
             aria-label="Proyecto anterior"
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 hover:text-white transition-all active:scale-95"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0d1029] hover:bg-violet-600/25 border border-violet-500/30 text-xs font-medium text-slate-200 hover:text-white transition-all active:scale-95"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4 text-violet-400" />
+            <span>Anterior</span>
           </button>
+
+          <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs text-violet-300 font-mono">
+            {activeIndex + 1} / {SLIDES.length}
+          </span>
+
           <button
             type="button"
             onClick={nextSlide}
             aria-label="Siguiente proyecto"
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 hover:text-white transition-all active:scale-95"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0d1029] hover:bg-violet-600/25 border border-violet-500/30 text-xs font-medium text-slate-200 hover:text-white transition-all active:scale-95"
           >
-            <ChevronRight className="w-4 h-4" />
+            <span>Siguiente</span>
+            <ChevronRight className="w-4 h-4 text-violet-400" />
           </button>
         </div>
       </div>
 
-      {/* Selector de Pestañas de Proyectos (Scrollable en móvil) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-3 no-scrollbar">
+      {/* Grilla compacta de pestañas (Sin scroll horizontal ni barras grises) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
         {SLIDES.map((slide, idx) => {
           const Icon = slide.icon;
           const isActive = idx === activeIndex;
@@ -192,14 +194,14 @@ export const ProjectCarousel: React.FC = () => {
               key={slide.id}
               type="button"
               onClick={() => goToSlide(idx)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap border transition-all shrink-0 ${
+              className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all ${
                 isActive
-                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-400/50 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-                  : "bg-[#0c0e24]/80 text-slate-400 border-white/10 hover:text-white hover:border-white/20"
+                  ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-400/60 shadow-[0_0_20px_rgba(139,92,246,0.4)]"
+                  : "bg-[#0b0d22]/90 text-slate-400 border-white/10 hover:text-white hover:border-violet-500/30 hover:bg-white/[0.04]"
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{slide.tag}</span>
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{slide.tag}</span>
             </button>
           );
         })}
@@ -520,18 +522,32 @@ export const ProjectCarousel: React.FC = () => {
                     </span>
                   </div>
 
-                  <div>
-                    <label className="block text-xs text-slate-300 mb-2">
-                      Deslizá para ajustar cantidad o dimensión del trabajo:
+                  <div className="space-y-2.5">
+                    <label className="block text-xs text-slate-300">
+                      Seleccioná cantidad o dimensión del trabajo:
                     </label>
-                    <input
-                      type="range"
-                      min={10}
-                      max={150}
-                      value={calcMeters}
-                      onChange={(e) => setCalcMeters(Number(e.target.value))}
-                      className="w-full accent-violet-500 cursor-pointer"
-                    />
+                    <div className="grid grid-cols-4 gap-2">
+                      {[20, 45, 80, 120].map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setCalcMeters(val)}
+                          className={`py-1.5 px-2 rounded-lg text-xs font-semibold border transition-all ${
+                            calcMeters === val
+                              ? "bg-violet-600 text-white border-violet-400 shadow-glow-sm"
+                              : "bg-black/40 text-slate-300 border-white/10 hover:border-violet-500/40"
+                          }`}
+                        >
+                          {val} m²
+                        </button>
+                      ))}
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-violet-500 to-indigo-400 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, (calcMeters / 120) * 100)}%` }}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
@@ -663,10 +679,10 @@ export const ProjectCarousel: React.FC = () => {
                   href={getWhatsAppLink(currentSlide.whatsappPrompt)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 transition-all"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Consultar este Proyecto por WhatsApp</span>
+                  <WhatsAppIcon className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Consultar este Proyecto</span>
                 </a>
 
                 <Link
