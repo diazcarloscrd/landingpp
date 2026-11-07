@@ -1,0 +1,12 @@
+{
+  "id": "lead-1793975426242-8jfpc4",
+  "created_at": "2026-11-06T14:30:26.244Z",
+  "name": "Juan Perez",
+  "email": "juan.perez@test.com",
+  "phone": "+54 9 11 9876-5432",
+  "serviceType": "crm",
+  "message": "Hola, necesito un sistema CRM a medida para gestionar 10 obras y presupuestos.",
+  "projectDetails": {},
+  "consent": true,
+  "status": "new"
+}
